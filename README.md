@@ -1,1 +1,1 @@
-# MST
+# MST minimum spanning tree (movimento sem terra)
