@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "IO.h"
+#include "Ponto.h"
 
 int main(int argc, char const *argv[])
 {
@@ -19,6 +21,19 @@ int main(int argc, char const *argv[])
                                                           // A ordenacao precisa vir primeiro pq caso contrario quebraria a funcao de union
     
     //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
+
+    // Aloca, calcula e preenche vetor de distancia de pontos
+    int qtd_distancias = (pow(qtd_pontos,2)-qtd_pontos)/2;
+    pDistancia *vetor_distancias = (pDistancia*)malloc(qtd_distancias*sizeof(pDistancia));
+    distancia_preenche_vetor(vetor_distancias,vetor_pontos,qtd_pontos,dimensoes);
+
+    // Ordena vetor de distancias pela distancia ao quadrado
+    distancia_ordena(vetor_distancias,qtd_distancias);
+
+    // Desalocacao de memoria das distancias
+    for(int i=0; i<qtd_distancias; i++)
+        distancia_destroi(vetor_distancias[i]);
+    free(vetor_distancias);
 
     // Desalocacao de memoria dos pontos
     for(int i=0; i<qtd_pontos; i++)

@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#pragma once
 #include "Ponto.h"
 
 /*
@@ -21,4 +20,5 @@ int* arquivo_setup(char *arquivo);
 */
 void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos);
 
+// Funcao de print de um vetor (vai ser usada para printar os grupos)
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);
