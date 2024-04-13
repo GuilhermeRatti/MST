@@ -20,3 +20,5 @@ int* arquivo_setup(char *arquivo);
     quantidade_pontos: quantidade de pontos a serem lidos
 */
 void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos);
+
+void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);

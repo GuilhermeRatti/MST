@@ -37,11 +37,11 @@ int* arquivo_setup(char *caminho_arquivo)
     fclose(arquivo);
 
     // Alocando um vetor de inteiros para retornar a quantidade de pontos e dimensoes
-    int *vetor = (int*)calloc(2,sizeof(int));
-    vetor[0] = qtd_pontos;
-    vetor[1] = dimensoes;
+    int *setup_resultados = (int*)malloc(2*sizeof(int));
+    setup_resultados[0] = qtd_pontos;
+    setup_resultados[1] = dimensoes;
 
-    return vetor;
+    return setup_resultados;
 }
 
 // FUNCAO NAO TERMINADA TABOM, NAO TESTEI NAO SEI SE TA FUNFANDO E NAO IMPLEMENTEI A FUNCAO ponto_cria()
@@ -52,27 +52,43 @@ void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimen
     if(arquivo == NULL)
     {
         printf("Erro ao abrir o arquivo\n");
-        return NULL;
+        return;
     }
 
     // Lendo o arquivo e registrando os pontos
-    char *linha = NULL;
     size_t size = 0;
+    char *linha = NULL;
     int qtd_pontos_registrados = 0;
-    while (feof(arquivo) == 0)
+    
+    // ********** MATHEUS
+    while (feof(arquivo) == 0) // Essa parte ta dando problema, antes do arquivo terminar tem mais 1 blank space que nao conta
+                               // como final de arquivo, nao finaliza o loop ai quebra o codigo logo abaixo pq vai tentar ler coisa que nao tem
     {
         getline(&linha, &size, arquivo);
+
         char* token = strtok(linha, ",");
-        char* id = token;
-        double *coordenadas = (double*)calloc(dimensoes,sizeof(double));
+
+        char* id = (char*)malloc(strlen(token)*sizeof(char)+1);         // Alocando espaco para armazenar o ID lido pelo strtok
+                                                                        // Isso eh necessario por conta de um comportamento especifico do getline()
+                                                                        // Caso contrario, assim que liberarmos o ponteiro line, vai tudo pro caralho
+        strcpy(id,token);
+        
+        double *coordenadas = (double*)malloc(dimensoes*sizeof(double));// Aloca um vetor para armazenar as dimensoes do ponto
         for (int i = 0; i < dimensoes; i++)
         {
             token = strtok(NULL, ",");
             coordenadas[i] = atof(token);
         }
 
-        pontos[qtd_pontos_registrados] = ponto_cria(id, coordenadas);
-        qtd_pontos_registrados++;
+        pontos[qtd_pontos_registrados++] = ponto_cria(id, coordenadas); // Salvando o ponto criado no vetor
     }
-    free(linha);
+    
+    free(linha);        // Liberando espaço alocado pela variavel usada pela funcao getline()
+    fclose(arquivo);    // Liberando espaço alocado pelo arquivo
+}
+
+void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos)
+{
+    for(int i = 0; i < quantidade_pontos; i++)
+        ponto_print(pontos[i]);
 }

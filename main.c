@@ -9,15 +9,20 @@ int main(int argc, char const *argv[])
 
     // verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
     int *qtd_e_dim = arquivo_setup(caminho_arquivo);
-
     int qtd_pontos = qtd_e_dim[0], dimensoes = qtd_e_dim[1];
-    free(qtd_e_dim);
-    printf("Quantidade de pontos: %d\n", qtd_pontos);
-    printf("Quantidade de dimensoes: %d\n", dimensoes);
+    free(qtd_e_dim); // Liberando o espaço alocado pelo vetor de resultados do arquivo_setup
 
-    pPonto *vetor_pontos = (pPonto*)calloc(qtd_pontos,sizeof(pPonto));
+    pPonto *vetor_pontos = (pPonto*)malloc(qtd_pontos*sizeof(pPonto));
 
+    arquivo_leitura_e_registro(caminho_arquivo,vetor_pontos,dimensoes,qtd_pontos); //Le todos os pontos e armazena eles no vetor
+    ponto_setup_de_ordenacao(vetor_pontos, qtd_pontos);   // A ideia eh pre-ordenar os pontos por ordem alfabetica e depois atribuir os grupos iniciais
+                                                          // A ordenacao precisa vir primeiro pq caso contrario quebraria a funcao de union
+    
+    //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
 
+    // Desalocacao de memoria dos pontos
+    for(int i=0; i<qtd_pontos; i++)
+        ponto_destroi(vetor_pontos[i]);
     free(vetor_pontos);
 
     return 0;
