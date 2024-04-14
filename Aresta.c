@@ -27,6 +27,29 @@ pAresta aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
     return arest;
 }
 
+void _max_heapify(pAresta *vetor_arestas, int quantidade_arestas, int idx)
+{
+    int filho_esquerda = 2*idx, filho_direita = 2*idx + 1, maior_val = idx;
+
+    if(filho_esquerda < quantidade_arestas && vetor_arestas[filho_esquerda]->distancia > vetor_arestas[idx]->distancia)
+        maior_val = filho_esquerda;
+    if(filho_direita < quantidade_arestas && vetor_arestas[filho_direita]->distancia > vetor_arestas[maior_val]->distancia)
+        maior_val = filho_direita;
+    if(maior_val != idx)
+    {
+        pAresta aux = vetor_arestas[idx];
+        vetor_arestas[idx] = vetor_arestas[maior_val];
+        vetor_arestas[maior_val] = vetor_arestas[idx];
+    }
+}       
+
+void _build_heap(pAresta *vetor_arestas, int quantidade_arestas)
+{
+    for(int i = 0; i<quantidade_arestas/2; i++)
+        _max_heapify(vetor_arestas, quantidade_arestas, i);
+    
+}
+
 // Registro das distancias no vetor
 void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes)
 {
@@ -34,6 +57,7 @@ void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int qua
     for(int i=0; i<quantidade_pontos; i++)
         for(int j=i+1; j<quantidade_pontos; j++) // Calcula a distancia entre os pontos vetor[i] e vetor[j] para registrar
             vetor_arestas[k++] = aresta_cria(i,j,ponto_calcula_distancia(vetor_pontos[i], vetor_pontos[j], dimensoes));
+            // if()
 }
 
 // Ordenador das distancias
