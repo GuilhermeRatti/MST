@@ -9,7 +9,7 @@
 #include <time.h>
 
 // Funcao de definicao dos grupos de clusters
-void define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas);
+int define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas, int quantidade_arestas);
 // Funcao de impressao dos grupos de clusters em ordem alfabetica
 void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
 
@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
     // Construcao dos clusters
     int qtd_clusters = atoi(argv[2]);
     int limite_unioes = qtd_pontos - qtd_clusters;
-    define_clusters(vetor_pontos, vetor_arestas, limite_unioes);
+    qtd_arestas = define_clusters(vetor_pontos, vetor_arestas, limite_unioes, qtd_arestas);
 
     printf("Clustei!\n");
     //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
@@ -73,22 +73,28 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes)
+int define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes, int quantidade_arestas)
 {
     int unioes_feitas = 0;
-    int posicao = 0;
     int vertices[2] = {-1,-1};
 
     while (unioes_feitas < limite_unioes)
     {
         // Pega os vertices que compoem a aresta atual
-        aresta_retorna_vertices(arestas[posicao], vertices);
+        // printf("QTD_A: %d | ",quantidade_arestas);
+        // printf("QTD_UF: %d\n",unioes_feitas);
+        // aresta_print(arestas[0]);
+        pAresta menor_aresta = aresta_retorna_menor_distancia(arestas,quantidade_arestas);
+
+        aresta_retorna_vertices(menor_aresta, vertices);
         // Tenta unir os vertices evitando unioes circulares (retorno 0)
         if (UF_union(pontos, vertices[0], vertices[1])) unioes_feitas++;
-        
-        posicao++;
+
+        aresta_destroi(menor_aresta);
+        quantidade_arestas--;
     }
-    
+
+    return quantidade_arestas;
 }
 
 void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)

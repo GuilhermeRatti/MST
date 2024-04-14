@@ -6,10 +6,10 @@ def randomword(length):
     return ''.join(random.choice(letters) for _ in range(length))
 
 # Example usage:
-numero_pontos = 30000
+numero_pontos = 25000
 numero_dimensoes = 10
 tamanho_id = 23 #23 chars
-nome_arquivo_saida = "testes_30k.txt"
+nome_arquivo_saida = "testes_25k.txt"
  
 pontos_registrados = dict()
 
