@@ -19,7 +19,7 @@ int* arquivo_setup(char *caminho_arquivo)
     int qtd_pontos = 0, dimensoes = 0;
     while (feof(arquivo) == 0)
     {
-        getline(&linha, &size, arquivo);
+        if(getline(&linha, &size, arquivo)==-1) break;
         qtd_pontos++;
     }
 
@@ -44,7 +44,6 @@ int* arquivo_setup(char *caminho_arquivo)
     return setup_resultados;
 }
 
-// FUNCAO NAO TERMINADA TABOM, NAO TESTEI NAO SEI SE TA FUNFANDO E NAO IMPLEMENTEI A FUNCAO ponto_cria()
 void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos)
 {
     // Verificando se o arquivo existe e erros na abertura
@@ -60,14 +59,13 @@ void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimen
     char *linha = NULL;
     int qtd_pontos_registrados = 0;
     
-    // ********** MATHEUS
+    int fim_da_leitura=0;
     while (feof(arquivo) == 0) // Essa parte ta dando problema, antes do arquivo terminar tem mais 1 blank space que nao conta
                                // como final de arquivo, nao finaliza o loop ai quebra o codigo logo abaixo pq vai tentar ler coisa que nao tem
     {
-        getline(&linha, &size, arquivo);
-
+        if(getline(&linha, &size, arquivo) == -1) break;
+       
         char* token = strtok(linha, ",");
-
         char* id = (char*)malloc(strlen(token)*sizeof(char)+1);         // Alocando espaco para armazenar o ID lido pelo strtok
                                                                         // Isso eh necessario por conta de um comportamento especifico do getline()
                                                                         // Caso contrario, assim que liberarmos o ponteiro line, vai tudo pro caralho

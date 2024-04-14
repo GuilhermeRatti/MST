@@ -27,12 +27,13 @@ pPonto ponto_cria(char *id, double *dims)
     return ponto;
 }
 
-void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho)
+void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
 {
-    qsort(vetor_pontos, tamanho, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
+    printf("TAMANHO: %d\n",tamanho_vet_pontos);
+    qsort(vetor_pontos, tamanho_vet_pontos, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
     
     // Atribui grupos
-    for(int i=0; i<tamanho; i++) 
+    for(int i=0; i<tamanho_vet_pontos; i++) 
     {
         vetor_pontos[i]->grupo = i;
         vetor_pontos[i]->tamanho_grupo = 1;

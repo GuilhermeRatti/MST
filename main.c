@@ -4,10 +4,11 @@
 #include <math.h>
 #include "IO.h"
 #include "Ponto.h"
+#include "Aresta.h"
 
 int main(int argc, char const *argv[])
 {
-    char *caminho_arquivo="dados_teste/1.txt";
+    char *caminho_arquivo="dados_teste/2.txt";
 
     // verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
     int *qtd_e_dim = arquivo_setup(caminho_arquivo);
