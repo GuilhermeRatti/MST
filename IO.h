@@ -25,4 +25,6 @@ void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int
 // Funcao de print de um vetor (vai ser usada para printar os grupos)
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);
 
+void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
+
 #endif // _IO_H_

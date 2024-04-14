@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "IO.h"
+#include "UnionFind.h"
 
 int* arquivo_setup(const char *caminho_arquivo)
 {
@@ -89,4 +90,79 @@ void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos)
 {
     for(int i = 0; i < quantidade_pontos; i++)
         ponto_print(pontos, pontos[i], i);
+}
+
+
+void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)
+{
+    // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro 
+    // indice eh o grupo do cluster 
+    pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
+    // Vetor paralelo de controle de inserção na matriz
+    int *vet_idx_interno = (int *)calloc(qtd_pontos, sizeof(int));
+    // Vetor de ordem de impressao dos clusters
+    int *vet_ordem_clusters = (int *)calloc(qtd_clusters, sizeof(int));
+    int idx_ordem_clusters = 0;
+    
+    int i = 0;
+    int grupo_atual = -1;
+    int idx_interno = -1;
+    pPonto aux = NULL;
+    //setup
+    for (i = 0; i < qtd_pontos; i++)
+    {
+        aux = pontos[i];
+
+        grupo_atual = UF_find(pontos, i);
+        idx_interno = vet_idx_interno[grupo_atual]; 
+        
+        if (!idx_interno)
+        {
+            vet_ordem_clusters[idx_ordem_clusters] = grupo_atual;
+            idx_ordem_clusters++;
+            matriz_pontos[grupo_atual] = (pPonto *)malloc(ponto_retorna_nfilhos(pontos[grupo_atual])*sizeof(pPonto));
+            matriz_pontos[grupo_atual][idx_interno] = aux;
+            
+            vet_idx_interno[grupo_atual]++;
+
+            continue;
+        }
+
+        matriz_pontos[grupo_atual][idx_interno] = aux;
+            
+        vet_idx_interno[grupo_atual]++;
+    }
+    
+    // Area da Impressao
+    FILE *saida = fopen(nome_saida, "w");
+    int tamanho_cluster = -1;
+    int j = 0;
+    
+    for (i = 0; i < qtd_clusters; i++)
+    {
+        //Selecao do cluster a ser impresso
+        grupo_atual = vet_ordem_clusters[i];
+        tamanho_cluster = ponto_retorna_nfilhos(pontos[grupo_atual]);
+        
+        //Impressao do cluster selecionado
+        for (j = 0; j < tamanho_cluster-1; j++)
+        {
+            fprintf(saida,"%s,", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+        }
+        fprintf(saida,"%s\n", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+    }
+
+    fclose(saida);
+
+    //Liberacao dos vetores para print
+    for ( i = 0; i < qtd_pontos; i++)
+    {
+        if (vet_idx_interno[i] != 0)
+        {
+            free(matriz_pontos[i]);
+        }
+    }
+    free(matriz_pontos);
+    free(vet_ordem_clusters);
+    free(vet_idx_interno);
 }
