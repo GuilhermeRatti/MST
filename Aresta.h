@@ -14,6 +14,8 @@ void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int qua
 // Funcao para ordenar o vetor de arestas em ordem crescente
 void aresta_ordena(pAresta *vetor_arestas, int quantidade_arestas);
 
+void aresta_retorna_vertices(pAresta aresta, int retorno[2]);
+
 void aresta_print(pAresta a);
 
 void aresta_destroi(pAresta a);

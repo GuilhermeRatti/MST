@@ -88,5 +88,5 @@ void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimen
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos)
 {
     for(int i = 0; i < quantidade_pontos; i++)
-        ponto_print(pontos[i]);
+        ponto_print(pontos, pontos[i], i);
 }

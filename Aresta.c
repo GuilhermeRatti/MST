@@ -42,6 +42,12 @@ void aresta_ordena(pAresta *vetor_arestas, int quantidade_distancias)
     qsort(vetor_arestas, quantidade_distancias, sizeof(pAresta), _aresta_comparador);
 }
 
+void aresta_retorna_vertices(pAresta aresta, int retorno[2])
+{
+    retorno[0] = aresta->idx_ponto1;
+    retorno[1] = aresta->idx_ponto2;
+}
+
 // Print das distancias pra visualizacao de ordenacao (TUDO OK!)
 void aresta_print(pAresta a)
 {

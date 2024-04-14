@@ -26,7 +26,7 @@ void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho);
 // Funcao para calcular a distancia euclidiana ao quadrado entre os pontos p1 e p2
 double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes);
 
-void ponto_print(pPonto p);
+void ponto_print(pPonto *v, pPonto p, int i);
 
 void ponto_destroi(pPonto p);
 

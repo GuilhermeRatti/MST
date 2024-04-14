@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "Ponto.h"
+#include "UnionFind.h"
 
 struct Ponto{
     char *id;
@@ -76,9 +77,9 @@ double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
 }
 
 // Print de um ponto para visualizacao
-void ponto_print(pPonto p)
+void ponto_print(pPonto *v, pPonto p, int i)
 {
-    printf("%s | GRUPO: %d\n",p->id,p->grupo);
+    printf("%s | GRUPO: %d\n",p->id, UF_find(v, i));
 }
 
 // Destroi um ponto e seus atributos alocados
