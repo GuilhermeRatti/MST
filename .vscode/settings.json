@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "io.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "stdlib.h": "c",
+        "ponto.h": "c"
     }
 }
