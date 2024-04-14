@@ -9,7 +9,7 @@
 #include <time.h>
 
 // Funcao de definicao dos grupos de clusters
-int define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas, int quantidade_arestas);
+void define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas, int quantidade_arestas, int vetor_de_retorno[2]);
 // Funcao de impressao dos grupos de clusters em ordem alfabetica
 void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
 
@@ -34,29 +34,36 @@ int main(int argc, char const *argv[])
     
     
     // Aloca, calcula e preenche vetor de distancia de pontos
-    int qtd_arestas = (pow(qtd_pontos,2)-qtd_pontos)/2;
-    pAresta *vetor_arestas = (pAresta*)malloc(qtd_arestas*sizeof(pAresta));
-    aresta_preenche_vetor(vetor_arestas,vetor_pontos,qtd_pontos,dimensoes);
-
-    printf("Aloquei!\n");
-
-    // Ordena vetor de arestas pela distancia ao quadrado
-    aresta_ordena(vetor_arestas,qtd_arestas);
-
-    printf("Ordenei!\n");
-    //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
+    int qtd_arestas = (pow(qtd_pontos,2)-qtd_pontos)/2, limite_inferior=0, UF_completo = 0;
+    pAresta *vetor_arestas = (pAresta*)malloc(qtd_arestas/2*sizeof(pAresta));
 
     // Construcao dos clusters
     int qtd_clusters = atoi(argv[2]);
     int limite_unioes = qtd_pontos - qtd_clusters;
-    qtd_arestas = define_clusters(vetor_pontos, vetor_arestas, limite_unioes, qtd_arestas);
+    while (UF_completo == 0)
+    {
+        aresta_preenche_vetor(vetor_arestas,vetor_pontos,qtd_pontos,dimensoes,qtd_arestas,limite_inferior);
+        limite_inferior = aresta_retorna_distancia(vetor_arestas[0]); // Pegar maior valor da primeira metade
 
-    printf("Clustei!\n");
-    //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
+        printf("Aloquei!\n");
 
-    // Desalocacao de memoria das arestas
-    for(int i=0; i<qtd_arestas; i++)
-        aresta_destroi(vetor_arestas[i]);
+        // Ordena vetor de arestas pela distancia ao quadrado
+        aresta_ordena(vetor_arestas,qtd_arestas/2);
+
+        printf("Ordenei!\n");
+        //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
+
+        int vetor_de_retorno[2] = {0,0};
+        define_clusters(vetor_pontos, vetor_arestas, limite_unioes, qtd_arestas/2, vetor_de_retorno);
+        printf("Clustei!\n");
+        //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
+
+        // Desalocacao de memoria das arestas
+        for(int i=0; i<vetor_de_retorno[1]; i++)
+            aresta_destroi(vetor_arestas[i]);
+        
+        if(vetor_de_retorno[0] >= limite_unioes) UF_completo = 1;
+    }
     free(vetor_arestas);
 
     // Impressao dos clusters
@@ -73,12 +80,12 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes, int quantidade_arestas)
+void define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes, int quantidade_arestas, int vetor_de_retorno[2])
 {
-    int unioes_feitas = 0;
+    int unioes_feitas = 0 + vetor_de_retorno[0];
     int vertices[2] = {-1,-1};
 
-    while (unioes_feitas < limite_unioes)
+    while (unioes_feitas < limite_unioes && quantidade_arestas>0)
     {
         // Pega os vertices que compoem a aresta atual
         // printf("QTD_A: %d | ",quantidade_arestas);
@@ -94,7 +101,8 @@ int define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes, int qua
         quantidade_arestas--;
     }
 
-    return quantidade_arestas;
+    vetor_de_retorno[0] = unioes_feitas;
+    vetor_de_retorno[1] = quantidade_arestas;
 }
 
 void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)

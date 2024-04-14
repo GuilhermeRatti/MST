@@ -9,7 +9,7 @@ typedef struct Aresta *pAresta;
 pAresta aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia);
 
 // Funcao para criar e registrar as arestas em seu respectivo vetor
-void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes);
+void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes, int quantidade_arestas, double limite_inferior);
 
 // Funcao para ordenar o vetor de arestas em ordem crescente
 void aresta_ordena(pAresta *vetor_arestas, int quantidade_arestas);
