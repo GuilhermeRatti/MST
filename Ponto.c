@@ -76,7 +76,7 @@ MACRO_TAMANHO ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
 {
     MACRO_TAMANHO quadrado_distancia=0;
     for(int i=0; i<dimensoes; i++)
-        quadrado_distancia = pow(p1->dimensoes[i]-p2->dimensoes[i],2);
+        quadrado_distancia += pow(p1->dimensoes[i]-p2->dimensoes[i],2);
     
     return quadrado_distancia;
 }
