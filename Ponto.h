@@ -1,7 +1,7 @@
 #pragma once
 
 typedef struct Ponto *pPonto;
-typedef struct Distancia *pDistancia;
+typedef struct Aresta *pAresta;
 
 // *******************************
 // ****** FUNCOES DE PONTOS ******
@@ -21,19 +21,19 @@ void ponto_print(pPonto p);
 
 void ponto_destroi(pPonto p);
 
-// ***********************************
-// ****** FUNCOES DE DISTANCIAS ******
-// ***********************************
+// ********************************
+// ****** FUNCOES DE ARESTAS ******
+// ********************************
 
-// Funcao para criar uma estrutura distancia
-pDistancia distancia_cria(int idx_p1, int idx_p2, double distancia);
+// Funcao para criar uma estrutura arestas
+pAresta aresta_cria(int idx_p1, int idx_p2, double distancia);
 
-// Funcao para criar e registrar as distancias em seu respectivo vetor
-void distancia_preenche_vetor(pDistancia *vetor_distancias, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes);
+// Funcao para criar e registrar as arestas em seu respectivo vetor
+void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes);
 
-// Funcao para ordenar o vetor de distancias em ordem crescente
-void distancia_ordena(pDistancia *vetor_distancias, int quantidade_distancias);
+// Funcao para ordenar o vetor de arestas em ordem crescente
+void aresta_ordena(pAresta *vetor_arestas, int quantidade_arestas);
 
-void distancia_print(pDistancia d);
+void aresta_print(pAresta a);
 
-void distancia_destroi(pDistancia d);
+void aresta_destroi(pAresta a);

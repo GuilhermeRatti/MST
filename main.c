@@ -23,17 +23,17 @@ int main(int argc, char const *argv[])
     //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
 
     // Aloca, calcula e preenche vetor de distancia de pontos
-    int qtd_distancias = (pow(qtd_pontos,2)-qtd_pontos)/2;
-    pDistancia *vetor_distancias = (pDistancia*)malloc(qtd_distancias*sizeof(pDistancia));
-    distancia_preenche_vetor(vetor_distancias,vetor_pontos,qtd_pontos,dimensoes);
+    int qtd_arestas = (pow(qtd_pontos,2)-qtd_pontos)/2;
+    pAresta *vetor_arestas = (pAresta*)malloc(qtd_arestas*sizeof(pAresta));
+    aresta_preenche_vetor(vetor_arestas,vetor_pontos,qtd_pontos,dimensoes);
 
-    // Ordena vetor de distancias pela distancia ao quadrado
-    distancia_ordena(vetor_distancias,qtd_distancias);
+    // Ordena vetor de arestas pela distancia ao quadrado
+    aresta_ordena(vetor_arestas,qtd_arestas);
 
-    // Desalocacao de memoria das distancias
-    for(int i=0; i<qtd_distancias; i++)
-        distancia_destroi(vetor_distancias[i]);
-    free(vetor_distancias);
+    // Desalocacao de memoria das arestas
+    for(int i=0; i<qtd_arestas; i++)
+        aresta_destroi(vetor_arestas[i]);
+    free(vetor_arestas);
 
     // Desalocacao de memoria dos pontos
     for(int i=0; i<qtd_pontos; i++)

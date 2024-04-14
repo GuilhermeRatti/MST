@@ -68,53 +68,53 @@ void ponto_destroi(pPonto p)
 // =====================================================================================================================================
 // =====================================================================================================================================
 
-struct Distancia{
+struct Aresta{
     int idx_ponto1, idx_ponto2; // Index dos pontos 1 e 2 no vetorzao de pontos; eh mais barato que salvar o ponteiro
     double distancia;
-}Distancia;
+}Aresta;
 
-int _distancia_comparador(const void* d1, const void *d2)
+int _aresta_comparador(const void* a1, const void *a2)
 {
     // Como estamos comparando doubles para retornar um inteiro, necessita-se de if else's
-    if((*(pDistancia*)d1)->distancia > (*(pDistancia*)d2)->distancia) { return 1; }
-    else if((*(pDistancia*)d1)->distancia < (*(pDistancia*)d2)->distancia) { return -1; }
+    if((*(pAresta*)a1)->distancia > (*(pAresta*)a2)->distancia) { return 1; }
+    else if((*(pAresta*)a1)->distancia < (*(pAresta*)a2)->distancia) { return -1; }
     else { return 0; }
 }
 
 // Funcao para criar distancias entre dois pontos
-pDistancia distancia_cria(int idx_p1, int idx_p2, double distancia)
+pAresta aresta_cria(int idx_p1, int idx_p2, double distancia)
 {
-    pDistancia dist = (pDistancia)malloc(sizeof(struct Distancia));
-    dist->idx_ponto1 = idx_p1;
-    dist->idx_ponto2 = idx_p2;
-    dist->distancia = distancia;
+    pAresta arest = (pAresta)malloc(sizeof(struct Aresta));
+    arest->idx_ponto1 = idx_p1;
+    arest->idx_ponto2 = idx_p2;
+    arest->distancia = distancia;
 
-    return dist;
+    return arest;
 }
 
 // Registro das distancias no vetor
-void distancia_preenche_vetor(pDistancia *vetor_distancias, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes)
+void aresta_preenche_vetor(pAresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int dimensoes)
 {
     int k=0;
     for(int i=0; i<quantidade_pontos; i++)
         for(int j=i+1; j<quantidade_pontos; j++) // Calcula a distancia entre os pontos vetor[i] e vetor[j] para registrar
-            vetor_distancias[k++] = distancia_cria(i,j,distancia_calcula(vetor_pontos[i], vetor_pontos[j], dimensoes));
+            vetor_arestas[k++] = aresta_cria(i,j,aresta_calcula(vetor_pontos[i], vetor_pontos[j], dimensoes));
 }
 
 // Ordenador das distancias
-void distancia_ordena(pDistancia *vetor_distancias, int quantidade_distancias)
+void aresta_ordena(pAresta *vetor_arestas, int quantidade_distancias)
 {
-    qsort(vetor_distancias, quantidade_distancias, sizeof(pDistancia), _distancia_comparador);
+    qsort(vetor_arestas, quantidade_distancias, sizeof(pAresta), _aresta_comparador);
 }
 
 // Print das distancias pra visualizacao de ordenacao (TUDO OK!)
-void distancia_print(pDistancia d)
+void aresta_print(pAresta a)
 {
-    printf("DISTANCIA: %lf | PONTOS: %d e %d.\n", d->distancia, d->idx_ponto1, d->idx_ponto2);
+    printf("DISTANCIA: %lf | PONTOS: %d e %d.\n", a->distancia, a->idx_ponto1, a->idx_ponto2);
 }
 
 // Destroi uma estrutura distancia
-void distancia_destroi(pDistancia d)
+void aresta_destroi(pAresta a)
 {
-    free(d);
+    free(a);
 }
