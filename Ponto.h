@@ -8,6 +8,18 @@ typedef struct Ponto *pPonto;
 */
 pPonto ponto_cria(char *id, double *coordenadas);
 
+// Retorna o grupo de um ponto
+int ponto_retorna_grupo(pPonto ponto);
+
+// Altera o grupo de um ponto
+void ponto_registra_grupo(pPonto ponto, int grupo);
+
+// Retorna o numero de filhos de um ponto
+int ponto_retorna_nfilhos(pPonto ponto);
+
+// Incrementa o numero de filhos de um ponto baseado nos filhos de outro ponto
+void ponto_incrementa_nfilhos(pPonto receptor, pPonto doador);
+
 // Funcao para definir valores como quantidade de pontos a serem lidos e quantidade de dimensoes de um ponto
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho);
 

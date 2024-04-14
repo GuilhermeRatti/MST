@@ -27,6 +27,26 @@ pPonto ponto_cria(char *id, double *dims)
     return ponto;
 }
 
+int ponto_retorna_grupo(pPonto ponto)
+{
+    return ponto->grupo;
+}
+
+void ponto_registra_grupo(pPonto ponto, int grupo)
+{
+    ponto->grupo = grupo;
+}
+
+int ponto_retorna_nfilhos(pPonto ponto)
+{
+    return ponto->tamanho_grupo;
+}
+
+void ponto_incrementa_nfilhos(pPonto receptor, pPonto doador)
+{   
+    receptor->tamanho_grupo += doador->tamanho_grupo;
+}
+
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho)
 {
     qsort(vetor_pontos, tamanho, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
