@@ -3,6 +3,9 @@
         "io.h": "c",
         "math.h": "c",
         "stdlib.h": "c",
-        "ponto.h": "c"
+        "ponto.h": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "istream": "c"
     }
 }

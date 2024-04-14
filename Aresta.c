@@ -16,7 +16,6 @@ int _aresta_comparador(const void* a1, const void *a2)
     else { return 0; }
 }
 
-
 // Funcao para criar distancias entre dois pontos
 pAresta aresta_cria(int idx_p1, int idx_p2, double distancia)
 {
