@@ -1,4 +1,6 @@
-#pragma once
+#if !defined(_IO_H_)
+#define _IO_H_
+
 #include "Ponto.h"
 
 /*
@@ -22,3 +24,5 @@ void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimen
 
 // Funcao de print de um vetor (vai ser usada para printar os grupos)
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);
+
+#endif // _IO_H_
