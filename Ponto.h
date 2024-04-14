@@ -1,4 +1,5 @@
-#pragma once
+#if !defined(_PONTO_H_)
+#define _PONTO_H_
 
 typedef struct Ponto *pPonto;
 
@@ -16,3 +17,5 @@ double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes);
 void ponto_print(pPonto p);
 
 void ponto_destroi(pPonto p);
+
+#endif // _PONTO_H_

@@ -1,4 +1,6 @@
-#pragma once
+#if !defined(_ARESTA_H_)
+#define _ARESTA_H_
+
 #include "Ponto.h"
 
 typedef struct Aresta *pAresta;
@@ -15,3 +17,5 @@ void aresta_ordena(pAresta *vetor_arestas, int quantidade_arestas);
 void aresta_print(pAresta a);
 
 void aresta_destroi(pAresta a);
+
+#endif // _ARESTA_H_
