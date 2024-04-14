@@ -10,7 +10,7 @@
     vet[0] = quantidade de pontos
     vet[1] = dimensoes
 */
-int* arquivo_setup(char *arquivo);
+int* arquivo_setup(const char *arquivo);
 
 /*
     Le um arquivo e registra os pontos em um vetor de ponteiros de pontos
@@ -20,7 +20,7 @@ int* arquivo_setup(char *arquivo);
     dimensoes: dimensoes dos pontos
     quantidade_pontos: quantidade de pontos a serem lidos
 */
-void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos);
+void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos);
 
 // Funcao de print de um vetor (vai ser usada para printar os grupos)
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);

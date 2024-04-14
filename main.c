@@ -11,7 +11,7 @@
 // Funcao de definicao dos grupos de clusters
 void define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas);
 // Funcao de impressao dos grupos de clusters em ordem alfabetica
-void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
+void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
 
 int main(int argc, char const *argv[])
 {
@@ -21,20 +21,14 @@ int main(int argc, char const *argv[])
         exit(printf("Quantidade insuficiente de parametros de entrada!\n"));
     }
 
-    char caminho_arquivo[256];
-    char nome_saida[256];
-    
-    strncpy(caminho_arquivo, argv[1], 255);
-    strncpy(nome_saida, argv[3], 255);
-
     // verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
-    int *qtd_e_dim = arquivo_setup(caminho_arquivo);
+    int *qtd_e_dim = arquivo_setup(argv[1]);
     int qtd_pontos = qtd_e_dim[0], dimensoes = qtd_e_dim[1];
     free(qtd_e_dim); // Liberando o espaço alocado pelo vetor de resultados do arquivo_setup
 
     pPonto *vetor_pontos = (pPonto*)malloc(qtd_pontos*sizeof(pPonto));
 
-    arquivo_leitura_e_registro(caminho_arquivo,vetor_pontos,dimensoes,qtd_pontos); //Le todos os pontos e armazena eles no vetor
+    arquivo_leitura_e_registro(argv[1],vetor_pontos,dimensoes,qtd_pontos); //Le todos os pontos e armazena eles no vetor
     ponto_setup_de_ordenacao(vetor_pontos, qtd_pontos);   // A ideia eh pre-ordenar os pontos por ordem alfabetica e depois atribuir os grupos iniciais
                                                           // A ordenacao precisa vir primeiro pq caso contrario quebraria a funcao de union
     
@@ -66,7 +60,7 @@ int main(int argc, char const *argv[])
     free(vetor_arestas);
 
     // Impressao dos clusters
-    imprime_clusters(nome_saida, vetor_pontos, qtd_pontos, qtd_clusters);
+    imprime_clusters(argv[3], vetor_pontos, qtd_pontos, qtd_clusters);
 
     // Desalocacao de memoria dos pontos
     for(int i=0; i<qtd_pontos; i++)
@@ -97,13 +91,14 @@ void define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes)
     
 }
 
-void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)
+void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)
 {
-    // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro indice eh o grupo do cluster 
+    // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro 
+    // indice eh o grupo do cluster 
     pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
-    //IDX
+    // Vetor paralelo de controle de inserção na matriz
     int *vet_idx_interno = (int *)calloc(qtd_pontos, sizeof(int));
-    //K
+    // Vetor de ordem de impressao dos clusters
     int *vet_ordem_clusters = (int *)calloc(qtd_clusters, sizeof(int));
     int idx_ordem_clusters = 0;
     
@@ -111,6 +106,7 @@ void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_
     int grupo_atual = -1;
     int idx_interno = -1;
     pPonto aux = NULL;
+    //setup
     for (i = 0; i < qtd_pontos; i++)
     {
         aux = pontos[i];

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "IO.h"
 
-int* arquivo_setup(char *caminho_arquivo)
+int* arquivo_setup(const char *caminho_arquivo)
 {
     // Verificando se o arquivo existe e erros na abertura
     FILE *arquivo = fopen(caminho_arquivo, "r");
@@ -44,7 +44,7 @@ int* arquivo_setup(char *caminho_arquivo)
     return setup_resultados;
 }
 
-void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos)
+void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos)
 {
     // Verificando se o arquivo existe e erros na abertura
     FILE *arquivo = fopen(caminho_arquivo, "r");
