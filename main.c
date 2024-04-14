@@ -6,6 +6,7 @@
 #include "Ponto.h"
 #include "Aresta.h"
 #include "UnionFind.h"
+#include <time.h>
 
 // Funcao de definicao dos grupos de clusters
 void define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas);
@@ -14,6 +15,7 @@ void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_
 
 int main(int argc, char const *argv[])
 {
+    clock_t start = clock ();
     if (argc < 4)
     {
         exit(printf("Quantidade insuficiente de parametros de entrada!\n"));
@@ -71,6 +73,9 @@ int main(int argc, char const *argv[])
         ponto_destroi(vetor_pontos[i]);
     free(vetor_pontos);
 
+    clock_t end = clock ();
+    double seconds = (( double ) end - start ) / CLOCKS_PER_SEC ;
+    printf ("%lf\n" , seconds );
     return 0;
 }
 
