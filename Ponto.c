@@ -50,7 +50,6 @@ void ponto_incrementa_nfilhos(pPonto receptor, pPonto doador)
 
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
 {
-    printf("TAMANHO: %d\n",tamanho_vet_pontos);
     qsort(vetor_pontos, tamanho_vet_pontos, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
     
     // Atribui grupos
