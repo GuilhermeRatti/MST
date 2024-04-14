@@ -1,6 +1,9 @@
 #main
 main
 
+#text
+*.txt
+
 # Prerequisites
 *.d
 

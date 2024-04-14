@@ -5,7 +5,7 @@
 
 struct Aresta{
     int idx_ponto1, idx_ponto2; // Index dos pontos 1 e 2 no vetorzao de pontos; eh mais barato que salvar o ponteiro
-    double distancia;
+    MACRO_TAMANHO distancia;
 }Aresta;
 
 int _aresta_comparador(const void* a1, const void *a2)
@@ -17,7 +17,7 @@ int _aresta_comparador(const void* a1, const void *a2)
 }
 
 // Funcao para criar distancias entre dois pontos
-pAresta aresta_cria(int idx_p1, int idx_p2, double distancia)
+pAresta aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
 {
     pAresta arest = (pAresta)malloc(sizeof(struct Aresta));
     arest->idx_ponto1 = idx_p1;

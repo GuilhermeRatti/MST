@@ -8,7 +8,9 @@
 #include "UnionFind.h"
 
 // Funcao de definicao dos grupos de clusters
-void define_clusters(pPonto* pontos, pAresta* arestas, int limite_arestas);
+void define_clusters(pPonto *pontos, pAresta *arestas, int limite_arestas);
+// Funcao de impressao dos grupos de clusters em ordem alfabetica
+void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
 
 int main(int argc, char const *argv[])
 {
@@ -17,7 +19,11 @@ int main(int argc, char const *argv[])
         exit(printf("Quantidade insuficiente de parametros de entrada!\n"));
     }
 
-    char *caminho_arquivo="dados_teste/2.txt";
+    char caminho_arquivo[256];
+    char nome_saida[256];
+    
+    strncpy(caminho_arquivo, argv[1], 255);
+    strncpy(nome_saida, argv[3], 255);
 
     // verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
     int *qtd_e_dim = arquivo_setup(caminho_arquivo);
@@ -36,22 +42,29 @@ int main(int argc, char const *argv[])
     pAresta *vetor_arestas = (pAresta*)malloc(qtd_arestas*sizeof(pAresta));
     aresta_preenche_vetor(vetor_arestas,vetor_pontos,qtd_pontos,dimensoes);
 
+    printf("Aloquei!\n");
+
     // Ordena vetor de arestas pela distancia ao quadrado
     aresta_ordena(vetor_arestas,qtd_arestas);
 
+    printf("Ordenei!\n");
     //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
 
     // Construcao dos clusters
-    int limite_unioes = qtd_pontos - atoi(argv[2]);
-    printf("LIMITE: %d\n", limite_unioes);
+    int qtd_clusters = atoi(argv[2]);
+    int limite_unioes = qtd_pontos - qtd_clusters;
     define_clusters(vetor_pontos, vetor_arestas, limite_unioes);
 
+    printf("Clustei!\n");
     //saida_printa_vetor_pontos(vetor_pontos,qtd_pontos); // Usei so pra ver se tava printando certo, vamo reaproveitar pra printas os grupos dps
 
     // Desalocacao de memoria das arestas
     for(int i=0; i<qtd_arestas; i++)
         aresta_destroi(vetor_arestas[i]);
     free(vetor_arestas);
+
+    // Impressao dos clusters
+    imprime_clusters(nome_saida, vetor_pontos, qtd_pontos, qtd_clusters);
 
     // Desalocacao de memoria dos pontos
     for(int i=0; i<qtd_pontos; i++)
@@ -61,7 +74,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void define_clusters(pPonto* pontos, pAresta* arestas, int limite_unioes)
+void define_clusters(pPonto *pontos, pAresta *arestas, int limite_unioes)
 {
     int unioes_feitas = 0;
     int posicao = 0;
@@ -77,4 +90,76 @@ void define_clusters(pPonto* pontos, pAresta* arestas, int limite_unioes)
         posicao++;
     }
     
+}
+
+void imprime_clusters(char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)
+{
+    // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro indice eh o grupo do cluster 
+    pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
+    //IDX
+    int *vet_idx_interno = (int *)calloc(qtd_pontos, sizeof(int));
+    //K
+    int *vet_ordem_clusters = (int *)calloc(qtd_clusters, sizeof(int));
+    int idx_ordem_clusters = 0;
+    
+    int i = 0;
+    int grupo_atual = -1;
+    int idx_interno = -1;
+    pPonto aux = NULL;
+    for (i = 0; i < qtd_pontos; i++)
+    {
+        aux = pontos[i];
+
+        grupo_atual = UF_find(pontos, i);
+        idx_interno = vet_idx_interno[grupo_atual]; 
+        
+        if (!idx_interno)
+        {
+            vet_ordem_clusters[idx_ordem_clusters] = grupo_atual;
+            idx_ordem_clusters++;
+            matriz_pontos[grupo_atual] = (pPonto *)malloc(ponto_retorna_nfilhos(pontos[grupo_atual])*sizeof(pPonto));
+            matriz_pontos[grupo_atual][idx_interno] = aux;
+            
+            vet_idx_interno[grupo_atual]++;
+
+            continue;
+        }
+
+        matriz_pontos[grupo_atual][idx_interno] = aux;
+            
+        vet_idx_interno[grupo_atual]++;
+    }
+    
+    // Area da Impressao
+    FILE *saida = fopen(nome_saida, "w");
+    int tamanho_cluster = -1;
+    int j = 0;
+    
+    for (i = 0; i < qtd_clusters; i++)
+    {
+        //Selecao do cluster a ser impresso
+        grupo_atual = vet_ordem_clusters[i];
+        tamanho_cluster = ponto_retorna_nfilhos(pontos[grupo_atual]);
+        
+        //Impressao do cluster selecionado
+        for (j = 0; j < tamanho_cluster-1; j++)
+        {
+            fprintf(saida,"%s,", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+        }
+        fprintf(saida,"%s\n", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+    }
+
+    fclose(saida);
+
+    //Liberacao dos vetores para print
+    for ( i = 0; i < qtd_pontos; i++)
+    {
+        if (vet_idx_interno[i] != 0)
+        {
+            free(matriz_pontos[i]);
+        }
+    }
+    free(matriz_pontos);
+    free(vet_ordem_clusters);
+    free(vet_idx_interno);
 }

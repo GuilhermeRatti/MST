@@ -7,7 +7,7 @@
 
 struct Ponto{
     char *id;
-    double *dimensoes;
+    MACRO_TAMANHO *dimensoes;
     int grupo;
     int tamanho_grupo;
 }Ponto;
@@ -19,7 +19,7 @@ int _ponto_comparador_alfabetico(const void* p1, const void* p2)
 }
 
 // Funcao para criar pontos; grupos serao definidos apos a ordenacao dos pontos por ordem alfabetica.
-pPonto ponto_cria(char *id, double *dims)
+pPonto ponto_cria(char *id, MACRO_TAMANHO *dims)
 {
     pPonto ponto = (pPonto)malloc(sizeof(struct Ponto));
     ponto->id = id;
@@ -49,6 +49,11 @@ void ponto_incrementa_nfilhos(pPonto receptor, pPonto doador)
     receptor->tamanho_grupo += doador->tamanho_grupo;
 }
 
+char *ponto_retorna_id(pPonto ponto)
+{
+    return ponto->id;
+}
+
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
 {
     qsort(vetor_pontos, tamanho_vet_pontos, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
@@ -67,9 +72,9 @@ void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
 // Funcao para calcular distancia entre dois pontos; como isto vai servir somente para comparar distancias,
 // seria melhor armazenar o quadrado das distancias, pois nao faz a menor diferenca, matematicamente, comparar
 // o quadrado entre as distancias ou a raiz das distancias. Salva um passo a menos para calcular.
-double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
+MACRO_TAMANHO ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
 {
-    double quadrado_distancia=0;
+    MACRO_TAMANHO quadrado_distancia=0;
     for(int i=0; i<dimensoes; i++)
         quadrado_distancia = pow(p1->dimensoes[i]-p2->dimensoes[i],2);
     

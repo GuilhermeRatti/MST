@@ -71,7 +71,7 @@ void arquivo_leitura_e_registro(char *caminho_arquivo, pPonto *pontos, int dimen
                                                                         // Caso contrario, assim que liberarmos o ponteiro line, vai tudo pro caralho
         strcpy(id,token);
         
-        double *coordenadas = (double*)malloc(dimensoes*sizeof(double));// Aloca um vetor para armazenar as dimensoes do ponto
+        MACRO_TAMANHO *coordenadas = (MACRO_TAMANHO*)malloc(dimensoes*sizeof(MACRO_TAMANHO));// Aloca um vetor para armazenar as dimensoes do ponto
         for (int i = 0; i < dimensoes; i++)
         {
             token = strtok(NULL, ",");
