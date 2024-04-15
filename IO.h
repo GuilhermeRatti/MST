@@ -22,6 +22,10 @@ int* arquivo_setup(const char *arquivo);
 */
 void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int dimensoes, int quantidade_pontos);
 
+// Imprime os clusters em ordem
+void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
+
+
 // Funcao de print de um vetor (vai ser usada para printar os grupos)
 void saida_printa_vetor_pontos(pPonto *pontos, int quantidade_pontos);
 
