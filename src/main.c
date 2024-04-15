@@ -10,12 +10,11 @@
 
 // Funcao de definicao dos grupos de clusters
 void define_clusters(Aresta *arestas, pPonto *pontos, int limite_unioes, int quantidade_arestas);
-// Funcao de impressao dos grupos de clusters em ordem alfabetica
-void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters);
 
 int main(int argc, char const *argv[])
 {
-    clock_t start = clock ();
+    //clock_t start = clock ();
+    
     if (argc < 4)
     {
         exit(printf("Quantidade insuficiente de parametros de entrada!\n"));
@@ -39,16 +38,11 @@ int main(int argc, char const *argv[])
     // Aloca, calcula e preenche vetor de distancia de pontos
     Aresta *vetor_arestas = aresta_cria_vetor(quantidade_arestas);
     arestas_preenche_vetor(vetor_arestas,vetor_pontos,quantidade_pontos,quantidade_arestas,dimensoes,limite_unioes);
-    printf("Aloquei!\n");
-    
-    // Ordena vetor de arestas pela distancia ao quadrado
-    printf("Ordenei!\n");
 
     // Construcao dos clusters
     define_clusters(vetor_arestas, vetor_pontos, limite_unioes, quantidade_arestas);
 
-    printf("Clustei!\n");
-
+    // Destroi o vetor de arestas (nao sera mais usado então libera o maior gasto de memoria do programa)
     aresta_destroi_vetor(vetor_arestas);
 
     // Impressao dos clusters
@@ -59,9 +53,9 @@ int main(int argc, char const *argv[])
         ponto_destroi(vetor_pontos[i]);
     free(vetor_pontos);
 
-    clock_t end = clock ();
-    double seconds = (( double ) end - start ) / CLOCKS_PER_SEC ;
-    printf ("%lf\n" , seconds );
+    // clock_t end = clock ();
+    // double seconds = (( double ) end - start ) / CLOCKS_PER_SEC ;
+    // printf ("Tempo Total: %lf\n" , seconds );
     return 0;
 }
 
