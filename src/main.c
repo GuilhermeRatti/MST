@@ -66,9 +66,7 @@ void define_clusters(Aresta *arestas, pPonto *pontos, int limite_unioes, int qua
 
     while (unioes_feitas < limite_unioes)
     {
-        // printf("qtd_unioes: %d | limite: %d\n",unioes_feitas,limite_unioes);
         aresta_retorna_vertices_menor_distancia(arestas,quantidade_arestas,vertices);      
-        // printf("p1: %d | p2: %d\n",vertices[0],vertices[1]);
     
         // Tenta unir os vertices evitando unioes circulares (retorno 0)
         if (UF_union(pontos, vertices[0], vertices[1])) unioes_feitas++;
