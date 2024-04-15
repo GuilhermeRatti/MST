@@ -3,19 +3,21 @@
 
 #include "Ponto.h"
 
+typedef struct Aresta Aresta;
+
 // Funcao para criar uma estrutura arestas
-// Aresta aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia);
+Aresta* aresta_cria_vetor(int quantidade_arestas);
 
 // Funcao para criar e registrar as arestas em seu respectivo vetor
-void arestas_preenche_vetor_e_calcula_clusters(pPonto *vetor_pontos, int quantidade_pontos, int dimensoes, int limite_unioes);
+void arestas_preenche_vetor(Aresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int quantidade_arestas, int dimensoes, int limite_unioes);
 
 // // Funcao para ordenar o vetor de arestas em ordem crescente
 // void aresta_ordena(int quantidade_arestas, Aresta vetor_arestas[]);
 
-// Aresta aresta_retorna_menor_distancia(int quantidade_arestas, Aresta vetor_arestas[]);
-
-// void aresta_retorna_vertices(Aresta aresta, int retorno[2]);
+void aresta_retorna_vertices_menor_distancia(Aresta *vetor_arestas, int quantidade_arestas, int vertices[]);
 
 // double aresta_retorna_distancia(Aresta a);
+
+void aresta_destroi_vetor(Aresta *vetor_aresta);
 
 #endif // _ARESTA_H_

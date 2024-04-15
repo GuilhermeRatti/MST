@@ -1,4 +1,5 @@
 #include "Ponto.h"
+#include <stdio.h>
 
 int UF_find( pPonto *vet, int i) {
     while (i != ponto_retorna_grupo(vet[i])){
@@ -19,7 +20,6 @@ int UF_find( pPonto *vet, int i) {
 int UF_union(pPonto *vet, int p, int q) {
     int i = UF_find(vet, p); // Modifique raiz de p para a raiz de q.
     int j = UF_find(vet, q); // Profundidade de p+q acessos.
-    
     // Operacao circular evitada
     if (i == j) return 0;
 

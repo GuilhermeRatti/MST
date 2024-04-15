@@ -10,8 +10,13 @@ typedef struct Aresta{
     MACRO_TAMANHO distancia;
 }Aresta;
 
+Aresta* aresta_cria_vetor(int quantidade_arestas)
+{
+    return (Aresta*)malloc(quantidade_arestas*sizeof(struct Aresta));
+}
+
 // Funcao para criar distancias entre dois pontos
-static Aresta aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
+static Aresta _aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
 {
     Aresta aresta;
     aresta.idx_ponto1 = idx_p1;
@@ -75,29 +80,34 @@ void _define_clusters(pPonto *pontos, int limite_unioes, int quantidade_arestas,
 }
 
 // Registro das distancias no vetor
-void arestas_preenche_vetor_e_calcula_clusters(pPonto *vetor_pontos, int quantidade_pontos, int dimensoes, int limite_unioes)
+void arestas_preenche_vetor(Aresta *vetor_arestas, pPonto *vetor_pontos, int quantidade_pontos, int quantidade_arestas, int dimensoes, int limite_unioes)
 {
-    int quantidade_arestas = (pow(quantidade_pontos,2)-quantidade_pontos)/2;
-
-    Aresta *vetor_arestas = (Aresta*)malloc(quantidade_arestas*sizeof(Aresta));
     int k=0;
     for(int i=0; i<quantidade_pontos; i++)
         for(int j=i+1; j<quantidade_pontos; j++) // Calcula a distancia entre os pontos vetor[i] e vetor[j] para registrar
-            vetor_arestas[k++] = aresta_cria(i,j,ponto_calcula_distancia(vetor_pontos[i], vetor_pontos[j], dimensoes));
+            vetor_arestas[k++] = _aresta_cria(i,j,ponto_calcula_distancia(vetor_pontos[i], vetor_pontos[j], dimensoes));
     
     // Ordenador das distancias
     _build_heap(quantidade_arestas,vetor_arestas);
 
-    _define_clusters(vetor_pontos, limite_unioes, quantidade_arestas, vetor_arestas);
-
-    free(vetor_arestas);
+    // _define_clusters(vetor_pontos, limite_unioes, quantidade_arestas, vetor_arestas);
 }
 
-// void aresta_retorna_vertices(Aresta aresta, int retorno[2])
-// {
-//     retorno[0] = aresta.idx_ponto1;
-//     retorno[1] = aresta.idx_ponto2;
-// }
+void aresta_retorna_vertices_menor_distancia(Aresta *vetor_arestas, int quantidade_arestas, int vertices[])
+{   
+    //printf("qtd_arestas: %d\n",quantidade_arestas);
+    Aresta menor_aresta = vetor_arestas[0];
+    vertices[0] = menor_aresta.idx_ponto1;
+    vertices[1] = menor_aresta.idx_ponto2;
+
+    vetor_arestas[0] = vetor_arestas[quantidade_arestas-1];
+    _min_heapify(quantidade_arestas-1,vetor_arestas,0); //LogN
+}
+
+void aresta_destroi_vetor(Aresta *vetor_aresta)
+{
+    free(vetor_aresta);
+}
 
 double aresta_retorna_distancia(Aresta a)
 {
