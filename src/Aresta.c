@@ -7,7 +7,7 @@
 
 typedef struct Aresta{
     int idx_ponto1, idx_ponto2; // Index dos pontos 1 e 2 no vetorzao de pontos; eh mais barato que salvar o ponteiro
-    MACRO_TAMANHO distancia;
+    double distancia;
 }Aresta;
 
 Aresta* aresta_cria_vetor(int quantidade_arestas)
@@ -16,7 +16,7 @@ Aresta* aresta_cria_vetor(int quantidade_arestas)
 }
 
 // Funcao para criar distancias entre dois pontos
-static Aresta _aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
+static Aresta _aresta_cria(int idx_p1, int idx_p2, double distancia)
 {
     Aresta aresta;
     aresta.idx_ponto1 = idx_p1;
@@ -28,7 +28,7 @@ static Aresta _aresta_cria(int idx_p1, int idx_p2, MACRO_TAMANHO distancia)
 
 // O proposito de usar min heap eh que conseguimos acessar o menor valor com tempo constante e reorganizar a heap com tempo de logN
 // No final, usando heap ao inves de Qsort teremos um pequeno ganho de velocidade, pois apesar de o pior caso dos 2 ser ~NlogN
-// O heap sera chamado somente ~(P-K)logA, sendo P o numero de pontos, K o numero de clusters desejados e A o numero de arestas,
+// O heap sera chamado somente ~(P-K)logA, sendo P o numero de pontos, K o numero de clusters que queremos e A o numero de arestas,
 // tal que A >> P e K; o heap pode demorar um pouco mais de acordo com a qtd de ligacoes circulares encontradas. 
 // O qsort por outro lado tera pior caso como ~AlogA, oq eh muito maior, pois eh necessario percorrer o vetor de arestas A inteiro
 void _min_heapify(int quantidade_arestas, Aresta *vetor_arestas, int idx)
@@ -66,7 +66,7 @@ void _min_heapify(int quantidade_arestas, Aresta *vetor_arestas, int idx)
 }       
 
 // Transforma um vetor desordenado em um heap
-void _build_heap(int quantidade_arestas, Aresta *vetor_arestas)
+void build_heap(int quantidade_arestas, Aresta *vetor_arestas)
 {
     //Complexidade ~N
     for(int i = (quantidade_arestas/2-1); i>=0; i--)
@@ -78,16 +78,11 @@ void arestas_preenche_vetor(Aresta *vetor_arestas, pPonto *vetor_pontos, int qua
 {
     int k=0;
     for(int i=0; i<quantidade_pontos; i++)
-        for(int j=i+1; j<quantidade_pontos; j++) // Calcula a distancia entre os pontos vetor[i] e vetor[j] para registrar
-            vetor_arestas[k++] = _aresta_cria(i,j,ponto_calcula_distancia(vetor_pontos[i], vetor_pontos[j], dimensoes));
-    
-    // Ordenador das distancias (no caso garante a propriedade de heap em que vetor[0] eh o menor valor possivel)
-    _build_heap(quantidade_arestas,vetor_arestas);
-
-    // _define_clusters(vetor_pontos, limite_unioes, quantidade_arestas, vetor_arestas);
+        for(int l=i+1; l<quantidade_pontos; l++) // Calcula a distancia entre os pontos vetor[i] e vetor[l] para registrar
+            vetor_arestas[k++] = _aresta_cria(i,l,ponto_calcula_distancia(vetor_pontos[i], vetor_pontos[l], dimensoes));
 }
 
-// Retorna a menor aresta e reordena o vetor para que vet[0] seja o proximo menor valor
+// Retorna a menor aresta e reordena o vetor para que vet[0] tenha o proximo menor valor
 void aresta_retorna_vertices_menor_distancia(Aresta *vetor_arestas, int quantidade_arestas, int vertices[])
 {   
     //printf("qtd_arestas: %d\n",quantidade_arestas);

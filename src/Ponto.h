@@ -1,17 +1,12 @@
 #if !defined(_PONTO_H_)
 #define _PONTO_H_
 
-#if !defined(MACRO_TAMANHO)
-#define MACRO_TAMANHO double
-#endif
-
-
 typedef struct Ponto *pPonto;
 
 /*
     Cria um ponto com o identificador e coordenadas passados
 */
-pPonto ponto_cria(char *id, MACRO_TAMANHO *coordenadas);
+pPonto ponto_cria(char *id, double *coordenadas);
 
 // Retorna o grupo de um ponto
 int ponto_retorna_grupo(pPonto ponto);
@@ -32,7 +27,7 @@ char *ponto_retorna_id(pPonto ponto);
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho);
 
 // Funcao para calcular a distancia euclidiana ao quadrado entre os pontos p1 e p2
-MACRO_TAMANHO ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes);
+double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes);
 
 void ponto_print(pPonto *v, pPonto p, int i);
 

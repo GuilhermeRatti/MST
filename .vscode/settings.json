@@ -6,6 +6,8 @@
         "ponto.h": "c",
         "*.tcc": "c",
         "string": "c",
-        "istream": "c"
+        "istream": "c",
+        "aresta.h": "c",
+        "time.h": "c"
     }
 }

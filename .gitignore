@@ -4,14 +4,14 @@ trab1
 
 #text
 *.txt
+dados_teste/*
 
 # Prerequisites
 *.d
 
-# Object files
+# Ob_ect files
 *.o
 *.ko
-*.obj
 *.elf
 
 # Linker output
@@ -29,7 +29,7 @@ trab1
 *.la
 *.lo
 
-# Shared objects (inc. Windows DLLs)
+# Shared ob_ects (inc. Windows DLLs)
 *.dll
 *.so
 *.so.*

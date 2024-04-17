@@ -13,7 +13,8 @@ void arestas_preenche_vetor(Aresta *vetor_arestas, pPonto *vetor_pontos, int qua
 
 void aresta_retorna_vertices_menor_distancia(Aresta *vetor_arestas, int quantidade_arestas, int vertices[]);
 
-// double aresta_retorna_distancia(Aresta a);
+// Ordenador das distancias (no caso garante a propriedade de heap em que vetor[0] eh o menor valor possivel)
+void build_heap(int quantidade_arestas, Aresta *vetor_arestas);
 
 void aresta_destroi_vetor(Aresta *vetor_aresta);
 

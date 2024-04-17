@@ -3,6 +3,7 @@
 #include <string.h>
 #include "IO.h"
 #include "UnionFind.h"
+#include <time.h>
 
 int* arquivo_setup(const char *caminho_arquivo)
 {
@@ -72,7 +73,7 @@ void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int
                                                                         // Caso contrario, assim que liberarmos o ponteiro line, vai tudo pro caralho
         strcpy(id,token);
         
-        MACRO_TAMANHO *coordenadas = (MACRO_TAMANHO*)malloc(dimensoes*sizeof(MACRO_TAMANHO));// Aloca um vetor para armazenar as dimensoes do ponto
+        double *coordenadas = (double*)malloc(dimensoes*sizeof(double));// Aloca um vetor para armazenar as dimensoes do ponto
         for (int i = 0; i < dimensoes; i++)
         {
             token = strtok(NULL, ",");
@@ -88,6 +89,11 @@ void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int
 
 void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, int qtd_clusters)
 {
+    
+    //INICIO IDENTIFICACAO GRUPOS
+    
+    time_t inicio = clock ();
+    
     // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro 
     // indice eh o grupo do cluster 
     pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
@@ -128,10 +134,19 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
         vet_idx_interno[grupo_atual]++;
     }
     
-    // Area da Impressao
+    time_t fim = clock ();
+    double seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
+    printf ("Identificacao dos grupos:\t%lf\n" , seconds );
+    
+    //FIM IDENTIFICACAO GRUPOS
+
+    //INICIO IMPRESSAO
+
+    inicio = clock ();
+
     FILE *saida = fopen(nome_saida, "w");
     int tamanho_cluster = -1;
-    int j = 0;
+    int l = 0;
     
     for (i = 0; i < qtd_clusters; i++)
     {
@@ -140,12 +155,18 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
         tamanho_cluster = ponto_retorna_nfilhos(pontos[grupo_atual]);
         
         //Impressao do cluster selecionado
-        for (j = 0; j < tamanho_cluster-1; j++)
+        for (l = 0; l < tamanho_cluster-1; l++)
         {
-            fprintf(saida,"%s,", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+            fprintf(saida,"%s,", ponto_retorna_id(matriz_pontos[grupo_atual][l]));
         }
-        fprintf(saida,"%s\n", ponto_retorna_id(matriz_pontos[grupo_atual][j]));
+        fprintf(saida,"%s\n", ponto_retorna_id(matriz_pontos[grupo_atual][l]));
     }
+
+    fim = clock ();
+    seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
+    printf ("Impressao:\t\t\t%lf\n" , seconds );
+    
+    //FIM IMPRESSAO
 
     fclose(saida);
 

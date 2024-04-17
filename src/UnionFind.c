@@ -19,19 +19,19 @@ int UF_find( pPonto *vet, int i) {
 
 int UF_union(pPonto *vet, int p, int q) {
     int i = UF_find(vet, p); // Modifique raiz de p para a raiz de q.
-    int j = UF_find(vet, q); // Profundidade de p+q acessos.
+    int l = UF_find(vet, q); // Profundidade de p+q acessos.
     // Operacao circular evitada
-    if (i == j) return 0;
+    if (i == l) return 0;
 
     // Verficacao para fins de balanceamento da arvore
-    if (ponto_retorna_nfilhos(vet[i]) < ponto_retorna_nfilhos(vet[j])) 
+    if (ponto_retorna_nfilhos(vet[i]) < ponto_retorna_nfilhos(vet[l])) 
     {
-        ponto_registra_grupo(vet[i], j);            // Processo de registro de grupo
-        ponto_incrementa_nfilhos(vet[j], vet[i]);   // Incremento no tamanho da raiz 
+        ponto_registra_grupo(vet[i], l);            // Processo de registro de grupo
+        ponto_incrementa_nfilhos(vet[l], vet[i]);   // Incremento no tamanho da raiz 
         return -1;
     }
         
-    ponto_registra_grupo(vet[j], i);                // Processo de registro de grupo 
-    ponto_incrementa_nfilhos(vet[i], vet[j]);       // Incremento no tamanho da raiz
+    ponto_registra_grupo(vet[l], i);                // Processo de registro de grupo 
+    ponto_incrementa_nfilhos(vet[i], vet[l]);       // Incremento no tamanho da raiz
     return 1;
 }
