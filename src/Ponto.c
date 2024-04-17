@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include <stdio.h>
 #include "Ponto.h"
 #include "UnionFind.h"
@@ -76,8 +75,10 @@ double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
 {
     double quadrado_distancia=0;
     for(int i=0; i<dimensoes; i++)
-        quadrado_distancia += pow(p1->dimensoes[i]-p2->dimensoes[i],2);
-    
+    {
+        double delta = p1->dimensoes[i]-p2->dimensoes[i];
+        quadrado_distancia += delta*delta;
+    }
     return quadrado_distancia;
 }
 
