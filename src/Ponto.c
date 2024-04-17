@@ -53,15 +53,28 @@ char *ponto_retorna_id(pPonto ponto)
     return ponto->id;
 }
 
+// COMPLEXIDADE TEMPO NO PIOR CASO: 6*Nlg(N) + 2*N acessos ao vetor, sendo N numero de elementos no vetor.
+// ~(6*Nlg[N]) acessos ao vetor.
+// COMPLEXIDADE espaco: ~(N).
 void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
-{
+{   
+    // realiza trocas de valores; cada iteração no pior caso, pelo menos, 4 acessos ao vetor
+    // aux = v[a]; #1 
+    // v[a] #2 = v[b]; #3 
+    // v[b] #4 = aux;
+    // COMPLEXIDADE tempo: 4 * Nlg(N) acessos ao vetor, sendo N a quantidade de elementos no vetor
+    // COMPLEXIDADE espaco: ~(N), sendo N o numero de elementos no vetor
     qsort(vetor_pontos, tamanho_vet_pontos, sizeof(pPonto), _ponto_comparador_alfabetico); // Ordena por ordem alfabetica
     
+
     // Atribui grupos
+    // 2 acessos de memoria por iteracao
+    // COMPLEXIDADE: 2 * N acessos ao vetor, sendo N a quantidade de elementos.
+    // COMPLEXIDADE espaco: ~(1) constante, nao existe espaco extra alocado.
     for(int i=0; i<tamanho_vet_pontos; i++) 
     {
-        vetor_pontos[i]->grupo = i;
-        vetor_pontos[i]->tamanho_grupo = 1;
+        vetor_pontos[i]->grupo = i;         // #1
+        vetor_pontos[i]->tamanho_grupo = 1; // #2
     }
     // A ideia aqui eh que se ordenassemos em ordem alfabetica depois de fazer as operacoes de union, quebraria tudo
     // porque os grupos vao ser referenciados por posicao... por ex.: grupo 2 significa que o ponto em questao ta no
@@ -72,7 +85,10 @@ void ponto_setup_de_ordenacao(pPonto *vetor_pontos, int tamanho_vet_pontos)
 // seria melhor armazenar o quadrado das distancias, pois nao faz a menor diferenca, matematicamente, comparar
 // o quadrado entre as distancias ou a raiz das distancias. Salva um passo a menos para calcular.
 double ponto_calcula_distancia(pPonto p1, pPonto p2, int dimensoes)
-{
+{   
+    // DIM * 2 acessos a vetor. 
+    // COMPLEXIDADE tempo: ~(2*DIM)
+    // COMPLEXIDADE espaco: ~(1) constante
     double quadrado_distancia=0;
     for(int i=0; i<dimensoes; i++)
     {

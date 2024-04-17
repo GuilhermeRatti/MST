@@ -49,8 +49,14 @@ int main(int argc, char const *argv[])
     
     inicio = clock ();
 
+    // OBSERVACAO COMPLEXIDADE: TODAS AS COMPLEXIDADES APRESENTADAS NA MAIN VAO SER EM FUNCAO DA QTD DE PONTOS P.
+    //                          A COMPLEXIDADE DENTRO DE CADA FUNCAO VAI SER ANALISADA 
+    //                          INDIVIDUALMENTE EM FUNCAO DE N (elementos recebidos por aquela funcao)
+
     // A ideia eh pre-ordenar os pontos por ordem alfabetica e depois atribuir os grupos iniciais
     // A ordenacao precisa vir primeiro pq caso contrario quebraria a funcao de union
+    // COMPLEXIDADE ~(6P*lg[P]) acessos ao vetor. 
+    // COMPLEXIDADE ~(P) de espaco alocado.
     ponto_setup_de_ordenacao(vetor_pontos, quantidade_pontos);  
     
     int quantidade_arestas = (pow(quantidade_pontos,2) - quantidade_pontos)/2;
@@ -59,6 +65,10 @@ int main(int argc, char const *argv[])
 
     // Aloca, calcula e preenche vetor de distancia de pontos
     Aresta *vetor_arestas = aresta_cria_vetor(quantidade_arestas);
+
+    // traduz-se o numero de arestas como (P^2-P)/2
+    // COMPLEXIDADE tempo: ~(DIM*P^2) acessos ao vetor. DIM eh uma constante representando numero de dimensoes.
+    // COMPLEXIDADE espaco: ~((P/2)^2)
     arestas_preenche_vetor(vetor_arestas,vetor_pontos,quantidade_pontos,quantidade_arestas,dimensoes,limite_unioes);
 
     fim = clock ();
@@ -72,6 +82,8 @@ int main(int argc, char const *argv[])
     inicio = clock ();
 
     // Ordenador das distancias (no caso garante a propriedade de heap em que vetor[0] eh o menor valor possivel)
+    // COMPLEXIDADE tempo: ~(4*[(P^2-P)/2]) acessos ao vetor
+    // COMPLEXIDADE espaco: ~(lg[(P^2-P)/2])
     build_heap(quantidade_arestas,vetor_arestas);
 
     fim = clock ();
@@ -85,6 +97,9 @@ int main(int argc, char const *argv[])
     inicio = clock ();
     
     // Construcao dos clusters
+    // Ignorando o fato de que a quantidade de arestas decresce a cada iteracao (a complexidade seria menor e mais dificil de calcular)
+    // COMPLEXIDADE tempo: ~(4*[P]*lg[(P^2-P)/2])
+    // COMPLEXIDADE espaco: ~(lg[(P^2-P)/2])
     define_clusters(vetor_arestas, vetor_pontos, limite_unioes, quantidade_arestas);
 
     fim = clock ();
@@ -120,11 +135,19 @@ void define_clusters(Aresta *arestas, pPonto *pontos, int limite_unioes, int qua
     int unioes_feitas = 0;
     int vertices[2] = {-1,-1};
 
+    // Desconsiderando ligacoes circulares.
+    // Havera (P-G) repeticoes, sendo P numero de pontos e G numero de grupos. Assume-se G como uma constante. Entao repeticoes: P
+    // COMPLEXIDADE tempo: ~(4*P*lg[(P^2-P)/2]) acessos, sendo P o numero de pontos. traduz-se o numero de arestas como (P^2-P)/2
+    // COMPLEXIDADE espaco: ~(lg[(P^2-P)/2])
     while (unioes_feitas < limite_unioes)
     {
+        // COMPLEXIDADE tempo: ~(4*lg[N]) acesos ao vetor
+        // COMPLEXIDADE espaco: ~(lg[N])
         aresta_retorna_vertices_menor_distancia(arestas,quantidade_arestas,vertices);      
     
         // Tenta unir os vertices evitando unioes circulares (retorno 0)
+        // COMPLEXIDADE tempo: ~(8*lg[N]) acessos ao vetor ... mas quase sempre ~(16) acessos
+        // COMPLEXIDADE espaco: ~(lg[N]) stacks de recursao ... mas quase sempre ~(1)
         if (UF_union(pontos, vertices[0], vertices[1])) unioes_feitas++;
 
         quantidade_arestas--;
