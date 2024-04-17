@@ -76,7 +76,7 @@ void build_heap(int quantidade_arestas, Aresta *vetor_arestas)
 {
     // Essa eh uma conta complicada e pode ser resolvida pelo metodo de escrever a progressao aritimetica formada pelas chamadas recursivas
     // mas a quantidade exata de _min_heapify executadas, no pior caso, seria N - lg(N + 1), 
-    // !! assumindo que o ultimo nivel do heap esteja completo. !!
+    // !! assumindo que o ultimo nivel do heap está completo. !!
     // COMPLEXIDADE tempo: ~(4*N) acessos ao vetor
     // COMPLEXIDADE espaco: ~(lg[N])
     for(int i = (quantidade_arestas/2-1); i>=0; i--)

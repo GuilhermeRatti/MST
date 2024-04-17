@@ -4,7 +4,7 @@
 int UF_find( pPonto *vet, int i) {
     // COMPLEXIDADE tempo: ~(4*lg[N]) acessos ao vetor no pior caso, mas por causa do halving, 
     //                      a complexidade de acessos quase sempre vai ser 4 (constante).
-    // COMPLEXIDADE espaco ~(lg[N]) stacks de recursao, mas quase sempre ~(1), msm justificativa acima.
+    // COMPLEXIDADE espaco ~(lg[N]) stacks de recursao, mas quase sempre ~(1), msm situacao acima.
     while (i != ponto_retorna_grupo(vet[i])){
         // 4 ACESSOS AO VETOR POR REPETICAO
         // O registro a seguir causa o efeito de halving da arvore
