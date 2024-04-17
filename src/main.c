@@ -13,11 +13,6 @@ void define_clusters(Aresta *arestas, pPonto *pontos, int limite_unioes, int qua
 
 int main(int argc, char const *argv[])
 {
-    //INICIO TEMPO TOTAL
-    
-    printf("Funcao:\t\t\t\tTempo:\n--------------------------------------------\n");
-
-    clock_t total = clock ();
     
     // Verificacao de entrada valida
     if (argc < 4)
@@ -25,29 +20,21 @@ int main(int argc, char const *argv[])
         exit(printf("Quantidade insuficiente de parametros de entrada!\n"));
     }
 
+    //INICIO LEITURA DOS DADOS
+   
     // Verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
     int *qtd_e_dim = arquivo_setup(argv[1]);
     int quantidade_pontos = qtd_e_dim[0], dimensoes = qtd_e_dim[1];
     free(qtd_e_dim); // Liberando o espaço alocado pelo vetor de resultados do arquivo_setup
 
     pPonto *vetor_pontos = (pPonto*)malloc(quantidade_pontos*sizeof(pPonto));
-
-    //INICIO LEITURA DOS DADOS
-    
-    clock_t inicio = clock ();
     
     //Le todos os pontos e armazena eles no vetor
     arquivo_leitura_e_registro(argv[1],vetor_pontos,dimensoes,quantidade_pontos); 
-
-    clock_t fim = clock ();
-    double seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Leitura dos Dados:\t\t%lf\n" , seconds );
     
     //FIM LEITURA DOS DADOS
 
     //INICIO CALCULO DAS DISTANCIAS
-    
-    inicio = clock ();
 
     // OBSERVACAO COMPLEXIDADE: TODAS AS COMPLEXIDADES APRESENTADAS NA MAIN VAO SER EM FUNCAO DA QTD DE PONTOS P.
     //                          A COMPLEXIDADE DENTRO DE CADA FUNCAO VAI SER ANALISADA 
@@ -70,41 +57,25 @@ int main(int argc, char const *argv[])
     // COMPLEXIDADE tempo: ~(DIM*P^2) acessos ao vetor. DIM eh uma constante representando numero de dimensoes.
     // COMPLEXIDADE espaco: ~((P/2)^2)
     arestas_preenche_vetor(vetor_arestas,vetor_pontos,quantidade_pontos,quantidade_arestas,dimensoes,limite_unioes);
-
-    fim = clock ();
-    seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Calculo das Distancias:\t\t%lf\n" , seconds );
     
     //FIM CALCULO DAS DISTANCIAS
 
     //INICIO ORDENACAO DAS DISTANCIAS
-
-    inicio = clock ();
 
     // Ordenador das distancias (no caso garante a propriedade de heap em que vetor[0] eh o menor valor possivel)
     // COMPLEXIDADE tempo: ~(4*[(P^2-P)/2]) acessos ao vetor
     // COMPLEXIDADE espaco: ~(lg[(P^2-P)/2])
     build_heap(quantidade_arestas,vetor_arestas);
 
-    fim = clock ();
-    seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Ordenacao das Distancias:\t%lf\n" , seconds );
-    
     //FIM ORDENACAO DAS DISTANCIAS
 
     //INICIO DEFINICAO CLUSTERS
 
-    inicio = clock ();
-    
     // Construcao dos clusters
     // Ignorando o fato de que a quantidade de arestas decresce a cada iteracao (a complexidade seria menor e mais dificil de calcular)
     // COMPLEXIDADE tempo: ~(4*[P]*lg[(P^2-P)/2])
     // COMPLEXIDADE espaco: ~(lg[(P^2-P)/2])
     define_clusters(vetor_arestas, vetor_pontos, limite_unioes, quantidade_arestas);
-
-    fim = clock ();
-    seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Definicao dos clusters:\t\t%lf\n" , seconds );
 
     //FIM DEFINICAO CLUSTERS
     
@@ -123,9 +94,6 @@ int main(int argc, char const *argv[])
         ponto_destroi(vetor_pontos[i]);
     free(vetor_pontos);
 
-    clock_t termino = clock ();
-    seconds = (( double ) termino - total ) / CLOCKS_PER_SEC ;
-    printf ("Tempo Total:\t\t\t%lf\n" , seconds );
     //FIM TEMPO TOTAL
     return 0;
 }

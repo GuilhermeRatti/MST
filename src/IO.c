@@ -91,9 +91,7 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
 {
     
     //INICIO IDENTIFICACAO GRUPOS
-    
-    time_t inicio = clock ();
-    
+  
     // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro 
     // indice eh o grupo do cluster 
     pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
@@ -108,7 +106,10 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
     int idx_interno = -1;
     pPonto aux = NULL;
     
-    //setup
+    // Pra cada primeira vez que um grupo novo eg encontrado eh alocado o tamanho do grupo de pontos, 
+    // assim chagando ao maximo de P alocacoes.
+    // COMPLEXIDADE de espaço: ~(P) espaço alocado
+    // COMPLEXIDADE de tempo: ~(4*P*lg[P]) acessos ao vetor = 4*P*lg[P] + 5*P + 5*K 
     for (i = 0; i < qtd_pontos; i++)
     {
         aux = pontos[i];
@@ -134,20 +135,19 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
         vet_idx_interno[grupo_atual]++;
     }
     
-    time_t fim = clock ();
-    double seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Identificacao dos grupos:\t%lf\n" , seconds );
-    
     //FIM IDENTIFICACAO GRUPOS
 
     //INICIO IMPRESSAO
-
-    inicio = clock ();
 
     FILE *saida = fopen(nome_saida, "w");
     int tamanho_cluster = -1;
     int l = 0;
     
+    // COMPLEXIDADE de espaço: ~(1) constante, nao ha espaco alocado
+    // A quantidade de acessos ao vetor realizada na funcao a seguir segue a equacao 4*K + 2*SUM(Ti), onde Ti eh o tamanho de um grupo respectivo.
+    // Portanto o somatorio de Ti do grupo 1 ate o grupo K eh a propria quantidade de pontos P, resultando na equacao 4*K + 2*P.
+    // COMPLEXIDADE de tempo: ~(2*P + 4*K) acessos ao vetor
+    //                        ~(P+K) prints [sao bem custosos]   
     for (i = 0; i < qtd_clusters; i++)
     {
         //Selecao do cluster a ser impresso
@@ -162,10 +162,6 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
         fprintf(saida,"%s\n", ponto_retorna_id(matriz_pontos[grupo_atual][l]));
     }
 
-    fim = clock ();
-    seconds = (( double ) fim - inicio ) / CLOCKS_PER_SEC ;
-    printf ("Impressao:\t\t\t%lf\n" , seconds );
-    
     //FIM IMPRESSAO
 
     fclose(saida);
