@@ -62,8 +62,7 @@ void arquivo_leitura_e_registro(const char *caminho_arquivo, pPonto *pontos, int
     int qtd_pontos_registrados = 0;
     
     int fim_da_leitura=0;
-    while (feof(arquivo) == 0) // Essa parte ta dando problema, antes do arquivo terminar tem mais 1 blank space que nao conta
-                               // como final de arquivo, nao finaliza o loop ai quebra o codigo logo abaixo pq vai tentar ler coisa que nao tem
+    while (feof(arquivo) == 0) 
     {
         if(getline(&linha, &size, arquivo) == -1) break;
        
@@ -91,7 +90,7 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
 {
     
     //INICIO IDENTIFICACAO GRUPOS
-  
+    
     // Matriz de pontos para organizacao dos clusters, funciona como uma tabela hash onde o primeiro 
     // indice eh o grupo do cluster 
     pPonto **matriz_pontos = (pPonto **)calloc(qtd_pontos, sizeof(pPonto*));
@@ -109,6 +108,9 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
     // Pra cada primeira vez que um grupo novo eg encontrado eh alocado o tamanho do grupo de pontos, 
     // assim chagando ao maximo de P alocacoes.
     // COMPLEXIDADE de espaço: ~(P) espaço alocado
+    //                         ~(K) ponteiros alocados para pontos
+    //                         ~(P) ponteiros para interos alocados para controle de posicao das linhas da matriz
+    //                         ~(K) ponteiros para interos alocados para ordenação dos grupos a serem impressos
     // COMPLEXIDADE de tempo: ~(4*P*lg[P]) acessos ao vetor = 4*P*lg[P] + 5*P + 5*K 
     for (i = 0; i < qtd_pontos; i++)
     {
@@ -143,7 +145,8 @@ void imprime_clusters(const char *nome_saida, pPonto *pontos, int qtd_pontos, in
     int tamanho_cluster = -1;
     int l = 0;
     
-    // COMPLEXIDADE de espaço: ~(1) constante, nao ha espaco alocado
+    // COMPLEXIDADE de espaço: ~(P) pontos alocados, vindo do passo anterior
+    //                         ~(K) ponteiros alocados para pontos, vindo do passo anterior
     // A quantidade de acessos ao vetor realizada na funcao a seguir segue a equacao 4*K + 2*SUM(Ti), onde Ti eh o tamanho de um grupo respectivo.
     // Portanto o somatorio de Ti do grupo 1 ate o grupo K eh a propria quantidade de pontos P, resultando na equacao 4*K + 2*P.
     // COMPLEXIDADE de tempo: ~(2*P + 4*K) acessos ao vetor

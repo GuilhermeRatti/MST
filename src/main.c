@@ -13,6 +13,7 @@ void define_clusters(Aresta *arestas, pPonto *pontos, int limite_unioes, int qua
 
 int main(int argc, char const *argv[])
 {
+    //INICIO TEMPO TOTAL
     
     // Verificacao de entrada valida
     if (argc < 4)
@@ -21,7 +22,7 @@ int main(int argc, char const *argv[])
     }
 
     //INICIO LEITURA DOS DADOS
-   
+
     // Verifica a existencia do arquivo, a quantidade de pontos e as dimensoes dos pontos
     int *qtd_e_dim = arquivo_setup(argv[1]);
     int quantidade_pontos = qtd_e_dim[0], dimensoes = qtd_e_dim[1];
@@ -57,7 +58,7 @@ int main(int argc, char const *argv[])
     // COMPLEXIDADE tempo: ~(DIM*P^2) acessos ao vetor. DIM eh uma constante representando numero de dimensoes.
     // COMPLEXIDADE espaco: ~((P/2)^2)
     arestas_preenche_vetor(vetor_arestas,vetor_pontos,quantidade_pontos,quantidade_arestas,dimensoes,limite_unioes);
-    
+   
     //FIM CALCULO DAS DISTANCIAS
 
     //INICIO ORDENACAO DAS DISTANCIAS
